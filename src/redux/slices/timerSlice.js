@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getTimeString } from "../../components/Functions";
 
 export const timerSlice = createSlice({
   name: "timer",
@@ -19,12 +20,7 @@ export const timerSlice = createSlice({
   },
 });
 
-const getTimeString = (time) => {
-  const hours = time.getHours();
-  const min = time.getMinutes();
-  const sec = time.getSeconds();
-  return `${hours} : ${min} : ${sec}`;
-};
+
 export const startTimer = (button, delay) => {
   return (dispatch) => {
     const currentTime = new Date();
@@ -36,6 +32,7 @@ export const startTimer = (button, delay) => {
       const logEntry = `Button № ${button}: ${endTime} - ${startTime} (${passed} sec)`;
       dispatch(addBtnLog(logEntry));
       dispatch(setActive(false));
+      clearTimeout(timerId)
     }, delay * 1000);
     dispatch(setActive(true));
   };
