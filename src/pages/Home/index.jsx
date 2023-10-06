@@ -3,12 +3,16 @@ import Btn from "../../components/Button";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import LinearProgress from "@mui/material/LinearProgress";
 import { useDispatch, useSelector } from "react-redux";
 import { clearTimers, startTimer } from "../../redux/slices/timerSlice";
-import { log } from "../../redux/selectors";
+import { log, isTimerActive } from "../../redux/selectors";
+import { Container } from "@mui/material";
+
 function Home() {
   const dispatch = useDispatch();
   const btnLog = useSelector(log);
+  const isActive = useSelector(isTimerActive);
   const handleTimerBtnClick = (button, delay) => {
     dispatch(startTimer(button, delay));
   };
@@ -16,12 +20,20 @@ function Home() {
     dispatch(clearTimers());
   };
   return (
-    <Box
+    <Container
       sx={{
-        margin: "0 auto",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        margin: "5%",
       }}
     >
-      <Grid container spacing={2} margin={"5%"}>
+      <Grid
+        container
+        spacing={{ xs: 2, md: 3, lg: 5 }}
+        justifyContent="center"
+        sx={{ marginBottom: "5%" }}
+      >
         <Grid item>
           <Btn
             text={"1 sec"}
@@ -49,13 +61,16 @@ function Home() {
           />
         </Grid>
         <Grid item>
-          <Btn text={"Clear"} onClick={handleClearBtnClick} />
+          <Btn text={"Clear"} onClick={handleClearBtnClick}/>
         </Grid>
       </Grid>
-      {btnLog.map((item, index) => (
-        <Typography key={index}>{item}</Typography>
-      ))}
-    </Box>
+      <Box>
+        {btnLog.map((item, index) => (
+          <Typography key={index}>{item}</Typography>
+        ))}
+        {isActive === true && <LinearProgress />}
+      </Box>
+    </Container>
   );
 }
 
